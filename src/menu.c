@@ -39,7 +39,11 @@
 
 void ShowControls(void)
 {
+#ifdef SYS_CTR
+	TextStringSpecial("(use player 1 controls or D-pad + Start/Select)", TEXT_BOTTOM | TEXT_XCENTER, 0, 10);
+#else
 	TextStringSpecial("(use player 1 controls or arrow keys + Enter/Backspace)", TEXT_BOTTOM | TEXT_XCENTER, 0, 10);
+#endif
 }
 
 void DisplayMenuItem(int x, int y, const char *s, int selected)

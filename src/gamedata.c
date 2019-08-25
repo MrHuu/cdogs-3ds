@@ -49,8 +49,13 @@ struct PlayerData gPlayer1Data = {
 	3, {GUN_SHOTGUN, GUN_MG, GUN_FRAGGRENADE},
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	KEYBOARD,
+#ifdef SYS_CTR
+	{SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN,
+	 keyA, keyB}
+#else
 	{SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN,
 	 SDLK_RSHIFT, SDLK_RETURN}
+#endif
 };
 
 struct PlayerData gPlayer2Data = {
@@ -58,8 +63,13 @@ struct PlayerData gPlayer2Data = {
 	3, {GUN_POWERGUN, GUN_FLAMER, GUN_GRENADE},
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	KEYBOARD,
+#ifdef SYS_CTR
+	{keyKeypad4, keyKeypad6, keyKeypad8, keyKeypad2, keyKeypad0,
+	 keyKeypad5}
+#else
 	{keyKeypad4, keyKeypad6, keyKeypad8, keyKeypad2, keyKeypad0,
 	 keyKeypadEnter}
+#endif
 };
 
 struct GameOptions gOptions = {
@@ -74,7 +84,11 @@ struct GameOptions gOptions = {
 	0,
 	0,
 	0, 0,
+#ifdef SYS_CTR
+	keyY,
+#else
 	keyTab,
+#endif
 	100,
 	100,
 	100,

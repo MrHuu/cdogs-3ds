@@ -580,15 +580,15 @@ int Is_Dir(const char *name)
 	//	if ((s.st_mode & S_IFMT) == S_IFDIR) {
 		switch (s.st_mode & S_IFMT) {
 			case S_IFDIR:
+
 				debug(D_VERBOSE, "is a dir...\n");
+
 				return 1;
-#ifndef SYS_WIN
+#if !defined SYS_WIN  && !defined SYS_CTR
 			case S_IFLNK:
 				{
 					char lnk_buf[512];
-
 					debug(D_VERBOSE, "is a symlink...\n");
-
 					if (readlink(name, lnk_buf, (size_t) 512) != -1) {
 						debug(D_VERBOSE, "resolved to '%s'\n", lnk_buf);
 						return Is_Dir(lnk_buf);

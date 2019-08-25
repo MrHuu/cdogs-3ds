@@ -71,6 +71,11 @@
 
 #define PICKUP_LIMIT         350
 
+#ifdef SYS_CTR
+	SDL_Event event;
+	int forced = 0;
+#endif
+
 static Uint32 ticks_now;
 static Uint32 ticks_then;
 
@@ -179,7 +184,9 @@ static void Ticks_FrameEnd(void)
 
 	now = SDL_GetTicks();
 	
+#ifndef SYS_CTR
 	SDL_Delay(33 - (ticks_now - now));
+#endif
 }
 
 static int Ticks_Synchronize(void)
@@ -506,6 +513,14 @@ int HandleKey(int *done, int cmd)
 	static int lastKey = 0;
 	int key = GetKeyDown();
 
+#ifdef SYS_CTR
+	SDL_PollEvent(&event);
+      if (event.type == SDL_QUIT) {
+		*done = YES;
+		forced = 1;
+      }
+#endif
+
 	if ((key == gOptions.mapKey || (cmd & CMD_BUTTON3) != 0) && !gCampaign.dogFight) {
 		DisplayAutoMap(0);
 	}
@@ -654,8 +669,18 @@ int gameloop(void)
 		c = HandleKey(&done, cmd1 | cmd2);
 
 		Ticks_FrameEnd();
+
 	}
 	free(buffer);
+#ifdef SYS_CTR
+	if (forced == 1) {
+		SDL_Quit();
+		exit(0);
+	} else {
 
+		return c != keyEsc;
+	}
+#else
 	return c != keyEsc;
+#endif
 }

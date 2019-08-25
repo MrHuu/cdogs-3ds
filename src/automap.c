@@ -133,7 +133,9 @@ static void DisplaySummary()
 {
 	int i, y, x, x2;
 	char sScore[20];
+#ifndef SYS_CTR
 	unsigned char *scr = GetDstScreen();
+#endif
 	unsigned char color;
 
 	y = SCREEN_HEIGHT - 5 - TextHeight(); // 10 pixels from bottom

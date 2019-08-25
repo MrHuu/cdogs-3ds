@@ -44,7 +44,11 @@ void InitKeyboard(void)
 
 char KeyDown(int key)
 {
+#ifdef SYS_CTR
+	unsigned char *tmp;
+#else
 	char *tmp;
+#endif
 
 	SDL_PumpEvents();
 

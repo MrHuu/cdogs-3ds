@@ -52,13 +52,20 @@
 
 GFX_Mode gfx_modelist[] = {
 	{ 320, 240 },
+#ifdef SYS_CTR
+	{ 400, 240 },
+#else
 	{ 400, 300 },
 	{ 640, 480 },
 	{ 800, 600 }, /* things go strange above this... */
+#endif
 	{ 0, 0 },
 };
+#ifdef SYS_CTR
+#define MODE_MAX 1
+#else
 #define MODE_MAX 3
-
+#endif
 
 #define Wrap(var, min, max)			\
 	{					\
@@ -109,7 +116,11 @@ int hints[HINT_END] = {
 	0,		// HINT_FULLSCREEN
 	1,		// HINT_WINDOW
 	1,		// HINT_SCALEFACTOR
+#ifdef SYS_CTR
+	400,		// HINT_WIDTH
+#else
 	320,		// HINT_WIDTH
+#endif
 	240,		// HINT_HEIGHT
 	0		// HINT_FORCEMODE
 };
@@ -144,8 +155,14 @@ int InitVideo(void)
 	int w, h = 0;
 	int rw, rh;
 
+#ifdef SYS_CTR
+	sdl_flags |= SDL_DOUBLEBUF;
+	sdl_flags |= SDL_SWSURFACE;
+	sdl_flags |= SDL_TOPSCR;
+#else
 	sdl_flags |= SDL_HWPALETTE;
 	sdl_flags |= SDL_SWSURFACE;
+#endif
 
 	if (Hint(HINT_FULLSCREEN)) sdl_flags |= SDL_FULLSCREEN;
 

@@ -74,7 +74,7 @@ int ReadPics(const char *filename, void **pics, int maxPics,
 int AppendPics(const char *filename, void **pics, int startIndex,
 	       int maxPics);
 
-#ifndef _MSC_VER
+#if !defined _MSC_VER && !defined SYS_CTR
 inline int PicWidth(void *pic);
 inline int PicHeight(void *pic);
 #else

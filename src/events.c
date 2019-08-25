@@ -108,7 +108,7 @@ int GetMouseRectTag(int x, int y, int *tag)
 }
 
 
-int IsEventPending (Uint32 m) {
+int IsEventPending (unsigned int m) {
 	SDL_Event e;
 
 	if (SDL_PeepEvents(&e, 1, SDL_GETEVENT, m)) {

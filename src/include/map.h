@@ -36,18 +36,21 @@
 
 #include "grafx.h" // for SCREEN_WIDTH etc
 
-#define YMAX    64
-#define XMAX    64
+#define YMAX	64
+#define XMAX	64
 
-#define TILE_WIDTH      16
-#define TILE_HEIGHT     12
+#define TILE_WIDTH	16
+#define TILE_HEIGHT	12
 
-//#define X_TILES         21
-#define X_TILES			(SCREEN_WIDTH / TILE_WIDTH + 2)
+#ifdef SYS_CTR
+#define X_TILES	(SCREEN_WIDTH / TILE_WIDTH + 2)
+#define Y_TILES	(X_TILES)
+#else
+#define X_TILES	(SCREEN_WIDTH / TILE_WIDTH + 2)
+#define Y_TILES	(SCREEN_HEIGHT / TILE_HEIGHT + 2)
+#endif
 
-#define X_TILES_HALF    ((X_TILES / 2) + 1)
-//#define Y_TILES         19
-#define Y_TILES			(SCREEN_HEIGHT / TILE_HEIGHT + 2)
+#define X_TILES_HALF	((X_TILES / 2) + 1)
 
 #define NO_WALK           1
 #define NO_SEE            2

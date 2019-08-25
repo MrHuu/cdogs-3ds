@@ -33,26 +33,38 @@
 /* where to look for the cdogs data files */
 
 #ifndef CDOGS_DATA_DIR
-	#define CDOGS_DATA_DIR "./data/"
+	#ifdef SYS_CTR
+		#define CDOGS_DATA_DIR "sdmc:/3ds/C-Dogs3DS/data"
+	#else
+		#define CDOGS_DATA_DIR "./data/"
+	#endif
 #endif
 
 #ifndef CDOGS_CFG_DIR
 	#ifdef SYS_WIN
 		#define CDOGS_CFG_DIR "./config/"
 	#elif SYS_MACOSX
-		#define CDOGS_CFG_DIR "Library/Application Support/C-Dogs SDL/"	
+		#define CDOGS_CFG_DIR "Library/Application Support/C-Dogs SDL/"
+	#elif SYS_CTR
+		#define CDOGS_CFG_DIR "data/"
 	#else
 		#define CDOGS_CFG_DIR ".cdogs/"
 	#endif
 #endif
 
 #ifndef CDOGS_MUSIC_DIR
-	#define CDOGS_MUSIC_DIR "./music/"
+	#ifdef SYS_CTR
+		#define CDOGS_MUSIC_DIR "music/"
+	#else
+		#define CDOGS_MUSIC_DIR "./music/"
+	#endif
 #endif
 
 #ifndef CDOGS_TEMP_DIR
 	#ifdef SYS_WIN
 		#define CDOGS_TEMP_DIR "C:/temp/cdogs/"
+	#elif SYS_CTR
+		#define CDOGS_TEMP_DIR "sdmc:/3ds/C-Dogs3DS/"
 	#else
 		#define CDOGS_TEMP_DIR "/tmp/cdogs/"
 	#endif

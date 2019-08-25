@@ -30,6 +30,10 @@
 #include <stdio.h>
 #include <time.h>
 
+#ifdef SYS_CTR
+#include "3ds.h"
+#endif
+
 #include "SDL.h"
 
 #include "joystick.h"
@@ -55,6 +59,9 @@
 #include "files.h"
 #include "utils.h"
 
+#ifdef SYS_CTR
+_Bool isN3DS;
+#endif
 
 static void *bkg = NULL;
 static char lastPassword[PASSWORD_MAX + 1] = "";
@@ -878,6 +885,13 @@ void PrintHelp (void)
 
 int main(int argc, char *argv[])
 {
+
+#ifdef SYS_CTR
+	APT_CheckNew3DS(&isN3DS);
+	if(isN3DS)
+		osSetSpeedupEnable(true);
+#endif
+
 	int i, wait = 0;
 	char s[13];
 	int snd_flag = SDL_INIT_AUDIO;

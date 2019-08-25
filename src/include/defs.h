@@ -38,6 +38,10 @@
 #define NO             0
 #endif
 
+#ifdef SYS_CTR
+#define CDOGS_3DS_VERSION	"25-08-2019"
+#endif
+
 #define CDOGS_VERSION		"v1.06"
 #define CDOGS_SDL_VERSION	"v0.4.1"
 #define CDOGS_SDL_HOMEPAGE	"http://icculus.org/cdogs-sdl"

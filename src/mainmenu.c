@@ -52,6 +52,9 @@
 #include "menu.h"
 #include "utils.h"
 
+#ifdef SYS_CTR
+#include "time.h"
+#endif
 
 #define MODE_MAIN       255
 #define MODE_PLAY       0
@@ -65,6 +68,10 @@
 
 
 #define MAIN_COUNT      7
+
+#ifdef SYS_CTR
+	SDL_Event event;
+#endif
 
 static const char *mainMenu[MAIN_COUNT] = {
 	"1 player game",
@@ -127,7 +134,12 @@ struct Credit {
 static struct Credit credits[] = {
 	{"Visit the C-Dogs SDL Homepage!",
 	 CDOGS_SDL_HOMEPAGE},
-
+#ifdef SYS_CTR
+	{"MrHuu",
+	 "Bringing you this awesome 3DS port"},
+	{"nop90",
+	 "Developer of the 3DS SDL Library's!"},
+#endif
 	{"Ronny Wester",
 	 "That's me! I designed and coded this game and I did all the graphics too"},
 	{"Joey Lau",
@@ -165,8 +177,11 @@ static struct Credit credits[] = {
 	 "He did all the hard porting work! ;)"}
 };
 
+#ifdef SYS_CTR
+#define CREDIT_PERIOD   80
+#else
 #define CREDIT_PERIOD   10
-
+#endif
 
 static TCampaignSetting customSetting = {
 /*	.title		=*/	"",
@@ -232,6 +247,13 @@ int SelectCampaign(int dogFight, int cmd)
 
 	if (cmd == CMD_ESC)
 		return MODE_MAIN;
+
+#ifdef SYS_CTR
+	SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) {
+			return MODE_QUIT;
+		}
+#endif
 
 	if (AnyButton(cmd)) {
 		for (i = 0, f = list; f != NULL && i < *index;
@@ -322,6 +344,14 @@ static int SelectMain(int cmd)
 		else
 			return MODE_QUIT;
 	}
+
+#ifdef SYS_CTR
+	SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) {
+			return MODE_QUIT;
+		}
+#endif
+
 	if (AnyButton(cmd)) {
 		switch (index) {
 		case 0:
@@ -352,11 +382,17 @@ static int SelectMain(int cmd)
 
 	DrawTPic((SCREEN_WIDTH - PicWidth(gPics[PIC_LOGO])) / 2, (SCREEN_HEIGHT / 12), gPics[PIC_LOGO], gCompiledPics[PIC_LOGO]);
 
+#ifdef SYS_CTR
+	TextStringSpecial("3DS Port:  " CDOGS_3DS_VERSION, TEXT_TOP | TEXT_LEFT, 20, 10);
+	TextStringSpecial("SDL Port:  " CDOGS_SDL_VERSION, TEXT_TOP | TEXT_LEFT, 20, 20);
+	TextStringSpecial("Classic :  " CDOGS_VERSION, TEXT_TOP | TEXT_LEFT, 20, 30);
+#else
 	TextStringSpecial("Classic: " CDOGS_VERSION, TEXT_TOP | TEXT_LEFT, 20, 20);
 	TextStringSpecial("SDL Port:  " CDOGS_SDL_VERSION, TEXT_TOP | TEXT_RIGHT, 20, 20);
+#endif
 
 	DisplayMenuAtCenter(mainMenu, MAIN_COUNT, index);
-	
+
 	return MODE_MAIN;
 }
 
@@ -393,6 +429,14 @@ int SelectOptions(int cmd)
 
 	if (cmd == CMD_ESC)
 		return MODE_MAIN;
+
+#ifdef SYS_CTR
+	SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) {
+			return MODE_QUIT;
+		}
+#endif
+
 	if (AnyButton(cmd) || Left(cmd) || Right(cmd)) {
 		switch (index) {
 		case 0:
@@ -539,8 +583,11 @@ int SelectOptions(int cmd)
 				} else if (Right(cmd)) {
 					fac++;
 				}
-
+#ifdef SYS_CTR
+				if (fac >= 1 && fac <= 2) {
+#else
 				if (fac >= 1 && fac <= 4) {
+#endif
 					Gfx_SetHint(HINT_SCALEFACTOR, (const int)fac);
 					InitVideo();
 				}
@@ -665,6 +712,14 @@ int SelectControls(int cmd)
 
 	if (cmd == CMD_ESC)
 		return MODE_MAIN;
+
+#ifdef SYS_CTR
+	SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) {
+			return MODE_QUIT;
+		}
+#endif
+
 	if (AnyButton(cmd) || Left(cmd) || Right(cmd)) {
 		PlaySound(rand() % SND_COUNT, 0, 255);
 		switch (index) {
@@ -864,6 +919,13 @@ int SelectKeys(int cmd)
 	if (cmd == CMD_ESC)
 		return MODE_CONTROLS;
 
+#ifdef SYS_CTR
+	SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) {
+			return MODE_QUIT;
+		}
+#endif
+
 	if (AnyButton(cmd)) {
 		PlaySound(rand() % SND_COUNT, 0, 255);
 
@@ -917,6 +979,13 @@ int SelectVolume(int cmd)
 
 	if (cmd == CMD_ESC)
 		return MODE_MAIN;
+
+#ifdef SYS_CTR
+	SDL_PollEvent(&event);
+		if (event.type == SDL_QUIT) {
+			return MODE_QUIT;
+		}
+#endif
 
 	if (AnyButton(cmd) && index == VOLUME_COUNT - 1)
 		return MODE_MAIN;
@@ -1028,7 +1097,11 @@ static void ShowCredits(void)
 	TextStringWithTableAt(20, SCREEN_HEIGHT - 40, credits[creditIndex].name, &tablePurple);
 	TextStringWithTableAt(20, SCREEN_HEIGHT - 40 + TextHeight(), credits[creditIndex].message, &tableDarker);
 
+#ifdef SYS_CTR
+	t = (SDL_GetTicks() / CLOCKS_PER_SEC);
+#else
 	t = clock() / CLOCKS_PER_SEC;
+#endif
 
 	if (t > lastTick + CREDIT_PERIOD) {
 		creditIndex++;
@@ -1062,7 +1135,7 @@ int MainMenu(void *bkg)
 			prev = cmd;
 
 		mode = MakeSelection(mode, cmd);
-		
+
 		CopyToScreen();
 
 		SDL_Delay(10);
